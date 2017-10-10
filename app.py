@@ -22,16 +22,11 @@ app.secret_key = os.urandom(32)
 @app.route("/", methods=["GET"])
 @app.route("/login", methods=["GET"])
 def login():
-    errors = ""
-    print request.args
-    if 'err' in request.args:
-        errors = request.args['err']
-    if session.get("uname") == username:
-        return render_template('welcome.html',
-                               username = username)
+    if "uname" in session:
+        return redirect(url_for("auth"))
     else:
         return render_template('login.html',
-                               errors = errors)
+                               errors = "")
 
 @app.route("/auth", methods=["POST"])
 def authentification():
@@ -41,17 +36,25 @@ def authentification():
     # Authenticate user
     if userIn == username and passIn == password:
         session["uname"] = userIn
-        return render_template("welcome.html",
-                               username = username)
+        return redirect(url_for("welcome"))
     elif userIn != username:
-        return redirect(url_for("login", err = "Incorrect username"))
+        return render_template("login.html", errors = "Incorrect username")
     else:
-        return redirect(url_for("login", err = "Incorrect password"))
+        return render_template("login.html", errors = "Incorrect password")
+
+@app.route("/welcome")
+def welcome():
+    if "uname" in session:
+        return render_template("welcome.html",
+                        username = session.get("uname"))
+    else:
+        redirect(url_for("authentification"))
 
 # Log out the user by resetting the session
 @app.route("/logout")
 def logout():
-    session["uname"] = ""
+    if "uname" in session:
+        session.pop("uname")
     return redirect(url_for("login"))
 
 if __name__ == "__main__":
