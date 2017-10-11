@@ -1,11 +1,13 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Welcome</title>
-  </head>
-  <body>
-        <h1> Welcome {{ username }}! </h1>
-        <br>
-        <a href="/logout">Logout</a>
-  </body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}
+Welcome!
+{% endblock %}
+{% block content %}
+{% for msg in get_flashed_messages() %}
+<h3 align="center"> {{ msg }} </h3>
+{% endfor %}
+<h1> Welcome {{ username }}! </h1>
+<br>
+<a href="/logout">Logout</a>
+{% endblock %}

@@ -6,7 +6,7 @@ HW07 -- Do I know you?
 '''
 
 # Import all necessities
-from flask import Flask, render_template, request, session, redirect, url_for
+from flask import Flask, render_template, request, session, redirect, url_for, flash
 import os
 app = Flask(__name__) # create instance of class
 
@@ -25,8 +25,7 @@ def login():
     if "uname" in session:
         return redirect(url_for("auth"))
     else:
-        return render_template('login.html',
-                               errors = "")
+        return render_template('login.html')
 
 @app.route("/auth", methods=["POST"])
 def authentification():
@@ -36,11 +35,14 @@ def authentification():
     # Authenticate user
     if userIn == username and passIn == password:
         session["uname"] = userIn
+        flash('Success!')
         return redirect(url_for("welcome"))
     elif userIn != username:
-        return render_template("login.html", errors = "Incorrect username")
+        flash('Incorrect user!')
+        return render_template("login.html")
     else:
-        return render_template("login.html", errors = "Incorrect password")
+        flash('Incorrect pass!')
+        return render_template("login.html")
 
 @app.route("/welcome")
 def welcome():

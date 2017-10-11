@@ -1,17 +1,18 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>LOGIN</title>
-    </head>
-    <body>
-        <h2 align="center"> Login Here </h2>
-        <div align="center"><form action="/auth" method="POST">
-            {% if errors != "" %}
-            <h3> {{ errors }} </h3>
-            {% endif %}
-            Username: <input type="text" name="username"><br>
-            Password: <input type="password" name="password"><br>
-            <input type="submit" name="loginPage">
-            </form></div>
-    </body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}
+LOGIN
+{% endblock %}
+{% block content %}
+{% for msg in get_flashed_messages() %}
+<h3 align="center"> {{ msg }} </h3>
+{% endfor %}
+<h2 align="center"> Login Here </h2>
+<div align="center">
+    <form action="/auth" method="POST">
+        Username: <input type="text" name="username"><br>
+        Password: <input type="password" name="password"><br>
+        <input type="submit" name="loginPage">
+    </form>
+</div>
+{% endblock %}
